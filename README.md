@@ -1,114 +1,187 @@
-# Guestbook on Kubernetes (IBM Cloud ICR)
+# IBM.K8s.RollingUpdates.Guestbook — JDW PoW
 
-A tiny Go web app (“Guestbook”) containerized, pushed to **IBM Cloud Container Registry (ICR)**, and deployed to Kubernetes with rolling updates, autoscaling, and rollback.
+📌 Proof-of-Work repo documenting my completion of the IBM Kubernetes: Rolling Updates & Rollbacks + HPA (Guestbook app) lab on OpenShift with IBM Cloud Container Registry (ICR).
 
-## What we built
-- **Multi-stage Docker image** (Go builder → small Ubuntu runtime).
-- Pushed to **us.icr.io/sn-labs-johndtwaldro/** as `guestbook:v1` and `guestbook:v2`.
-- **Kubernetes Deployment** (container port 3000), port-forwarded for access.
-- **HPA** (HorizontalPodAutoscaler) based on CPU (min=1, max=10, target=5%).
-- **Rolling update** from v1 → v2 (UI text changed to “John’s Guestbook - v2”).
-- **Rollback** back to v1 and verification via ReplicaSets & pod images.
+🎓 Certification
 
-## Key learnings
-- **ICR basics**: `ibmcloud cr region-set us-south`, `ibmcloud cr login`, naming: `us.icr.io/<namespace>/<repo>:<tag>`.
-- **Docker multi-stage** keeps runtime image small; copy the built binary with  
-  `COPY --from=builder /app/main /app/guestbook`.
-- **Deployment versioning**: change image tag and `kubectl set image` → watch with `kubectl rollout status` and audit with `kubectl rollout history`.
-- **HPA can affect rollouts**: scale decisions may delay termination of old pods; pause/remove HPA during controlled rollouts if needed.
-- **Port-forward gotcha**: “address already in use” → kill the old one  
-  `pkill -f 'kubectl.*port-forward.*3000:3000'`.
-- **Namespacing typos** matter (`johndtwaldro` vs `johndtwaldron`)—export once and reuse:  
-  `export MY_NAMESPACE=sn-labs-johndtwaldro`.
+Coursera Certificate (Verify): TBD – add link when available
 
-## File structure
-guestbook/
-├─ main.go
-├─ Dockerfile
-├─ deployment.yml
-├─ public/
-│ ├─ index.html (v1 → v2 title/header change)
-│ ├─ script.js
-│ ├─ style.css
-│ └─ jquery.min.js
-└─ docs/screenshots/ (lab proofs: *.png)
+Credly Badge: TBD – add link when available
 
-bash
-Copy code
+PDF copy of my issued certificate: jdw-cert-K8sGuestbook.pdf
 
-## Build & Push
-```bash
-export MY_NAMESPACE=sn-labs-johndtwaldro
+📂 Project Overview
+
+This repo captures an end-to-end workflow:
+
+Containerize a small Go guestbook app (multi-stage Dockerfile).
+
+Push images to IBM Cloud Container Registry (us.icr.io/<namespace>).
+
+Deploy to Kubernetes via deployment.yml.
+
+Expose locally with kubectl port-forward.
+
+Configure Horizontal Pod Autoscaler.
+
+Perform rolling update (v1 → v2), then rollback.
+
+Capture outputs/screenshots as evidence.
+
+Repo layout
+/ (repo root)
+├─ v1/
+│  └─ guestbook/
+│     ├─ Dockerfile
+│     ├─ deployment.yml
+│     └─ public/
+│        ├─ index.html   # (edited for v2 title)
+│        ├─ script.js
+│        ├─ style.css
+│        └─ jquery.min.js
+├─ README.md
+├─ (screenshots: *.png/*.jpg)
+└─ (certificate PDFs if any)
+
+🖼️ Screenshots (evidence)
+
+Dockerfile update (multi-stage + COPYs): dockerfile.png
+
+Build & push image to ICR: upguestbook.png
+
+ICR images listing: crimages.png
+
+Initial app (v1): app.png
+
+HPA created & scaling: hpa.png, hpa2.png
+
+Apply deployment with CPU req/limits: deployment.png
+
+Rollout revision details: rev.png
+
+Updated app (v2): up-app.png
+
+Filenames match the ones captured in-lab. If you rename, update here.
+
+🛠️ Commands & Workflow
+
+Assumes you’re in /home/project/guestbook/v1/guestbook (or this repo’s v1/guestbook) and have the IBM CLI + kubectl configured.
+
+0) IBM Cloud Container Registry (ICR)
+export MY_NAMESPACE=sn-labs-johndtwaldro   # replace with your ICR namespace
 ibmcloud cr region-set us-south
 ibmcloud cr login
 
-# v1
+1) Build & push (v1)
 docker build . -t us.icr.io/$MY_NAMESPACE/guestbook:v1
-docker push us.icr.io/$MY_NAMESPACE/guestbook:v1
+docker push       us.icr.io/$MY_NAMESPACE/guestbook:v1
 
-# v2 (after editing public/index.html)
-docker build . -t us.icr.io/$MY_NAMESPACE/guestbook:v2
-docker push us.icr.io/$MY_NAMESPACE/guestbook:v2
-Deploy / Update / Access
-bash
-Copy code
-# create/update deployment
+# verify in ICR
+ibmcloud cr images | grep "$MY_NAMESPACE/guestbook"
+
+2) Deployment & port-forward
+# deployment.yml includes:
+#  - image: us.icr.io/$MY_NAMESPACE/guestbook:v1
+#  - resources: limits.cpu=5m, requests.cpu=2m
 kubectl apply -f deployment.yml
-kubectl rollout status deploy/guestbook
 
-# switch image to v2
-kubectl set image deploy/guestbook \
-  guestbook=us.icr.io/$MY_NAMESPACE/guestbook:v2
-kubectl rollout status deploy/guestbook
-
-# port-forward (local 3000 → pod 3000)
+# local access
 kubectl port-forward deployment.apps/guestbook 3000:3000
-# if busy: pkill -f 'kubectl.*port-forward.*3000:3000'
-Autoscaling
-bash
-Copy code
-kubectl autoscale deployment guestbook \
-  --cpu-percent=5 --min=1 --max=10
-kubectl get hpa guestbook --watch
-Tip: If a rollout seems stuck while HPA is scaling, temporarily disable it:
+# open toolbox → Other → Launch Application → port 3000
 
-bash
-Copy code
+3) Horizontal Pod Autoscaler (HPA)
+kubectl autoscale deployment guestbook --cpu-percent=5 --min=1 --max=10
+kubectl get hpa guestbook --watch
+
+4) Rolling update to v2
+
+Update public/index.html header/title to “John’s Guestbook – v2”, then:
+
+# build & push v2
+docker build . -t us.icr.io/$MY_NAMESPACE/guestbook:v2
+docker push       us.icr.io/$MY_NAMESPACE/guestbook:v2
+
+# update image on the running deployment
+kubectl set image deployment/guestbook \
+  guestbook=us.icr.io/$MY_NAMESPACE/guestbook:v2
+
+# watch rollout
+kubectl rollout status deployment/guestbook
+
+# inspect revisions
+kubectl rollout history deploy/guestbook
+kubectl rollout history deploy/guestbook --revision=3
+
+5) Rollback
+# stop autoscaler so it doesn’t fight scaling
 kubectl delete hpa guestbook --ignore-not-found
+
+# rollback to a specific revision (e.g., 1)
+kubectl rollout undo deployment/guestbook --to-revision=1
+
+# pin to 1 replica and wait finished
 kubectl scale deploy/guestbook --replicas=1
 kubectl rollout status deploy/guestbook
-Rollback
-bash
-Copy code
-# see revisions
-kubectl rollout history deploy/guestbook
-# inspect a specific revision
-kubectl rollout history deploy/guestbook --revision=3
-# rollback
-kubectl rollout undo deploy/guestbook --to-revision=1
-kubectl rollout status deploy/guestbook
-Verification snippets
-bash
-Copy code
+
+# confirm only v1 is active
 kubectl get rs
 kubectl get pods -l app=guestbook \
   -o jsonpath="{range .items[*]}{.metadata.name}{'\t'}{.spec.containers[0].image}{'\n'}{end}"
-kubectl describe deploy/guestbook | grep -i 'Image:'
-Screenshots (for submission)
-docs/screenshots/:
 
-dockerfile.png
+🧱 Dockerfile (multi-stage)
 
-crimages.png
+Key bits used:
 
-app.png
+# --- builder ---
+FROM golang:1.18 AS builder
+WORKDIR /app
+COPY main.go .
+RUN go mod init guestbook && go mod tidy
+RUN go build -o main main.go
 
-hpa.png / hpa2.png
+# --- runtime ---
+FROM ubuntu:18.04
+COPY --from=builder /app/main /app/guestbook
+COPY public/index.html      /app/public/index.html
+COPY public/script.js       /app/public/script.js
+COPY public/style.css       /app/public/style.css
+COPY public/jquery.min.js   /app/public/jquery.min.js
+WORKDIR /app
+CMD ["./guestbook"]
+EXPOSE 3000
 
-upguestbook.png
 
-deployment.png
+We purposely avoid the old github.com/xyproto/simpleredis dependency to sidestep module version issues seen in the lab.
 
-rev.png
+🔧 Troubleshooting notes
 
-up-app.png
+Port-forward already in use
+If kubectl port-forward says address already in use:
+
+pkill -f 'kubectl.*port-forward.*3000:3000'
+
+
+Stuck rollout
+Check RS and pods:
+
+kubectl get rs
+kubectl describe deploy/guestbook | grep -i image:
+kubectl rollout status deploy/guestbook
+
+
+HPA vs rollout fights
+Temporarily delete the HPA during rollouts:
+
+kubectl delete hpa guestbook --ignore-not-found
+
+📝 What I learned
+
+Multi-stage Docker builds for small runtime images.
+
+Pushing to IBM Cloud Container Registry (ibmcloud cr tooling).
+
+Kubernetes Deployments, Rolling Updates, Rollback, ReplicaSets.
+
+HPA behavior and watching replicas scale via CPU targets.
+
+Practical debugging: stuck rollouts, port-forward conflicts, and verifying which image a pod is actually running.
