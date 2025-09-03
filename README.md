@@ -1,16 +1,20 @@
 # IBM.K8s.RollingUpdates.Guestbook — JDW PoW
 
+---
+
 📌 Proof-of-Work repo documenting my completion of the IBM Kubernetes: Rolling Updates & Rollbacks + HPA (Guestbook app) lab on OpenShift with IBM Cloud Container Registry (ICR).
 
 🎓 Certification
 
-Coursera Certificate (Verify): TBD – add link when available
+## Coursera Certificate (Verify): TBD – add link when available
 
 Credly Badge: TBD – add link when available
 
 PDF copy of my issued certificate: jdw-cert-K8sGuestbook.pdf
 
-📂 Project Overview
+---
+
+## 📂 Project Overview
 
 This repo captures an end-to-end workflow:
 
