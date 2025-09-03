@@ -95,9 +95,9 @@ ibmcloud cr images | grep "$MY_NAMESPACE/guestbook"
 ```
 
 2) Deployment & port-forward
-# deployment.yml includes:
-#  - image: us.icr.io/$MY_NAMESPACE/guestbook:v1
-#  - resources: limits.cpu=5m, requests.cpu=2m
+deployment.yml includes:
+- image: us.icr.io/$MY_NAMESPACE/guestbook:v1
+- resources: limits.cpu=5m, requests.cpu=2m
 ```bash
 kubectl apply -f deployment.yml
 ```
