@@ -34,7 +34,6 @@ Capture outputs/screenshots as evidence.
 
 ---
 
-```md
 <details>
   <summary><b>Repo layout</b></summary>
 
