@@ -11,7 +11,6 @@
 ![Credly Badge: TBD: ](add link when available)
 
 ![PDF copy of my issued certificate: TBD: ](jdw-cert-K8sGuestbook.pdf)
-![Dockerfile update (multi-stage + COPYs)](dockerfile.png)
 
 ---
 
