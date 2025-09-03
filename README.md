@@ -37,6 +37,7 @@ Capture outputs/screenshots as evidence.
 <details>
   <summary><b>Repo layout</b> (click to expand)</summary>
 
+```text
 / (repo root)
 ├─ v1/
 │  └─ guestbook/
@@ -50,6 +51,8 @@ Capture outputs/screenshots as evidence.
 ├─ README.md
 ├─ (screenshots: *.png/*.jpg)
 └─ (certificate PDFs if any)
+
+```
 </details>
 
 ---
