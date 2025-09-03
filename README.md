@@ -8,9 +8,10 @@
 
 ## Coursera Certificate (Verify): TBD – add link when available
 
-Credly Badge: TBD – [add link when available]
+![Credly Badge: TBD: ](add link when available)
 
-PDF copy of my issued certificate: 'jdw-cert-K8sGuestbook.pdf'
+![PDF copy of my issued certificate: TBD: ](jdw-cert-K8sGuestbook.pdf)
+![Dockerfile update (multi-stage + COPYs)](dockerfile.png)
 
 ---
 
@@ -118,30 +119,30 @@ kubectl get hpa guestbook --watch
 
 Update public/index.html header/title to “John’s Guestbook – v2”, then:
 
-# build & push v2
+- build & push v2
 ```bash
 docker build . -t us.icr.io/$MY_NAMESPACE/guestbook:v2
 docker push       us.icr.io/$MY_NAMESPACE/guestbook:v2
 ```
-# update image on the running deployment
+- update image on the running deployment
 ```bash
 kubectl set image deployment/guestbook \
   guestbook=us.icr.io/$MY_NAMESPACE/guestbook:v2
 ```
 
-# watch rollout
+- watch rollout
 ```bash
 kubectl rollout status deployment/guestbook
 ```
 
-# inspect revisions
+- inspect revisions
 ```bash
 kubectl rollout history deploy/guestbook
 kubectl rollout history deploy/guestbook --revision=3
 ```
 
 5) Rollback
-# stop autoscaler so it doesn’t fight scaling
+stop autoscaler so it doesn’t fight scaling
 ```bash
 kubectl delete hpa guestbook --ignore-not-found
 ```
