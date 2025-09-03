@@ -34,20 +34,26 @@ Capture outputs/screenshots as evidence.
 
 ---
 
-Repo layout
+```md
+<details>
+  <summary><b>Repo layout</b></summary>
+
+```text
 / (repo root)
 ├─ v1/
 │  └─ guestbook/
 │     ├─ Dockerfile
 │     ├─ deployment.yml
 │     └─ public/
-│        ├─ index.html   # (edited for v2 title)
+│        ├─ index.html   # edited for v2 title
 │        ├─ script.js
 │        ├─ style.css
 │        └─ jquery.min.js
 ├─ README.md
 ├─ (screenshots: *.png/*.jpg)
 └─ (certificate PDFs if any)
+</details>
+```
 
 ---
 
