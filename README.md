@@ -8,9 +8,9 @@
 
 ## Coursera Certificate (Verify): TBD – add link when available
 
-Credly Badge: TBD – add link when available
+Credly Badge: TBD – [add link when available]
 
-PDF copy of my issued certificate: jdw-cert-K8sGuestbook.pdf
+PDF copy of my issued certificate: 'jdw-cert-K8sGuestbook.pdf'
 
 ---
 
@@ -53,21 +53,21 @@ Repo layout
 
 ## 🖼️ Screenshots (evidence)
 
-- Dockerfile update (multi-stage + COPYs): dockerfile.png
+- Dockerfile update (multi-stage + COPYs): 'dockerfile.png'
 
-- Build & push image to ICR: upguestbook.png
+- Build & push image to ICR: 'upguestbook.png'
 
-- ICR images listing: crimages.png
+- ICR images listing: 'crimages.png'
 
-- Initial app (v1): app.png
+- Initial app (v1): 'app.png'
 
-- HPA created & scaling: hpa.png, hpa2.png
+- HPA created & scaling: 'hpa.png', 'hpa2.png'
 
-- Apply deployment with CPU req/limits: deployment.png
+- Apply deployment with CPU req/limits: 'deployment.png'
 
-- Rollout revision details: rev.png
+- Rollout revision details: 'rev.png'
 
-- Updated app (v2): up-app.png
+- Updated app (v2): 'up-app.png'
 
 Filenames match the ones captured in-lab. If you rename, update here.
 
