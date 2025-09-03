@@ -51,8 +51,7 @@ Capture outputs/screenshots as evidence.
 ├─ README.md
 ├─ (screenshots: *.png/*.jpg)
 └─ (certificate PDFs if any)
-</details>
-```
+</details>```
 
 ---
 
