@@ -6,13 +6,10 @@
 
 🎓 Certification
 
-## Coursera Certificate (Verify): TBD – add link when available
-
 ![Credly Badge: TBD: ](containers-kubernetes-essentials.1.png)
 
-& Cert URL => [cert](https://www.coursera.org/account/accomplishments/verify/937KSG8P7VTI "Coursera verification")
-
-![PDF copy of my issued certificate: TBD: ](Containers&K8s.JDW.cert.IBMDesign20250903-30-49pn3i.pdf)
+[Cert URL](https://www.coursera.org/account/accomplishments/verify/937KSG8P7VTI "Coursera verification")
+PDF copy of my issued certificate: : [Containers&K8s.JDW.cert.IBMDesign20250903-30-49pn3i.pdf](Containers&K8s.JDW.cert.IBMDesign20250903-30-49pn3i.pdf)
 
 ---
 
